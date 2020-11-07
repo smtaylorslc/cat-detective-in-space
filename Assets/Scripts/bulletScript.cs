@@ -23,7 +23,7 @@ public class bulletScript : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col) {
         // Detect collision of bullet with enemy.
-        if(col.tag == "MagmaBallTag") {
+        if((col.tag == "MagmaBallTag")|(col.tag == "fishTag")) {
             GameObject go = Instantiate(explosionPrefab);
             go.transform.position = new Vector3(
                 r2d.transform.position.x,

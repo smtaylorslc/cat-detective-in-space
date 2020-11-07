@@ -12,12 +12,6 @@ public class enemySpawner : MonoBehaviour
         Invoke("SpawnEnemy", maxSpawnRateInSeconds);
         InvokeRepeating("IncreaseSpawnRate", 0f, 30f);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     void SpawnEnemy()
     {
         // Bottom left point of screen

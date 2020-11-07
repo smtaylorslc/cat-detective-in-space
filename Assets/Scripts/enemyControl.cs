@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class enemyControl : MonoBehaviour
 {
-    float speed;
+    public float speed;
     // Start is called before the first frame update
     void Start()
     {
         speed = 2f;
     }
-    void setEnemyPosition(){
+    public virtual void setEnemyPosition(){
         // This method should be overridden for 
         // different enemy movement types.
 
