@@ -12,6 +12,25 @@ public class enemySpawner : MonoBehaviour
         Invoke("SpawnEnemy", maxSpawnRateInSeconds);
         InvokeRepeating("IncreaseSpawnRate", 0f, 30f);
     }
+    float nextRandom(float minVal, float maxVal){
+        float u, v, S;
+
+        do
+        {
+            u = 2.0f * Random.value - 1.0f;
+            v = 2.0f * Random.value - 1.0f;
+            S = u * u + v * v;
+        }
+        while (S >= 1.0f);
+
+        float std = u * Mathf.Sqrt(-2.0f * Mathf.Log(S) / S);
+ 
+        // Normal Distribution centered between the min and max value
+        // and clamped following the "three-sigma rule"
+        float mean = (minVal + maxVal) / 2.0f;
+        float sigma = (maxVal - mean) / 3.0f;
+        return Mathf.Clamp(std * sigma + mean, minVal, maxVal);
+    }
     void SpawnEnemy()
     {
         // Bottom left point of screen
@@ -22,7 +41,7 @@ public class enemySpawner : MonoBehaviour
 
         // instantiate enemy
         GameObject newEnemy = (GameObject)Instantiate (enemy);
-        enemy.transform.position = new Vector2 (max.x, Random.Range (min.y, max.y));
+        enemy.transform.position = new Vector2 (max.x, nextRandom(min.y, max.y));
         ScheduleNextEnemySpawn();
     }
     void ScheduleNextEnemySpawn()
