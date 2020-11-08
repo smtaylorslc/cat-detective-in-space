@@ -6,10 +6,15 @@ public class spaceshipScript : MonoBehaviour
 {
     Rigidbody2D r2d;
     public GameObject bulletPrefab;
+    public HealthBarScript healthBar;
+    public int maxHealth = 100;
+    public int currentHealth;
     // Start is called before the first frame update
     void Start()
     {
         r2d = GetComponent<Rigidbody2D>();
+        currentHealth = maxHealth;
+        healthBar.setMaxHealth(maxHealth);
     }
 
     // Update is called once per frame
@@ -53,8 +58,12 @@ public class spaceshipScript : MonoBehaviour
     void OnTriggerEnter2D(Collider2D col)
     {
         // Detect collision of player ship with magma ball
-        if((col.tag == "MagmaBallTag")) {
-            Destroy(gameObject); // Destroy the player's ship.
+        if((col.tag == "MagmaBallTag") | (col.tag == "fishTag")) {
+            takeDamage(10);
+            healthBar.SetHealth(currentHealth);
         }
+    }
+    void takeDamage(int dmg){
+        currentHealth -= dmg;
     }
 }
