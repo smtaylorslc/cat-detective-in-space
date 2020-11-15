@@ -19,9 +19,7 @@ public class Player : MonoBehaviour
 
     public Rigidbody2D throwable;
     public float attackSpeed = 0.5f;
-    public float coolDown;
-    public float projectileSpeed = 400;
-    public float aimAngle;
+    public float projectileSpeed = 2.5f;
 
     private void Awake()
     {
@@ -38,19 +36,20 @@ public class Player : MonoBehaviour
         }
         if (Input.GetButtonDown("Fire1"))
         {
-            Rigidbody2D toss = Instantiate(throwable, new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation) as Rigidbody2D;
+            Vector3 mouse_position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 mouse_pos_2d = new Vector2(mouse_position.x, mouse_position.y);
+            // Calling this a "grenade" even though I know it's probably
+            // not going to be a grenade -- just makes more sense to my
+            // brain than "toss".
+            Rigidbody2D grenade = Instantiate(
+                throwable,
+                transform.position,
+                transform.rotation
+            ) as Rigidbody2D;
 
-            //toss.GetComponent<Rigidbody2D>().AddForce(transform.position * aimAngle * 10f);
-            //this is the big problem, I've manage to get code for an aim angle...I just don't know how to use it properly, the above line doesn't work
-            //try it out to see the problem, if you find a solution please tell me
-
-            coolDown = Time.time + attackSpeed;
-            Vector3 m_pos = Input.mousePosition;
-            Vector3 g_pos = Camera.main.WorldToScreenPoint(throwable.transform.position);
-            m_pos.x = m_pos.x - g_pos.x;
-            m_pos.y = m_pos.y - g_pos.y;
-            aimAngle = (Mathf.Atan2(m_pos.y, m_pos.x) * Mathf.Rad2Deg);
-
+            float coolDown = Time.time + attackSpeed;
+            grenade.GetComponent<Rigidbody2D>().velocity = 
+                (mouse_pos_2d - new Vector2(transform.position.x, transform.position.y)) * projectileSpeed;
         }
     }
 
