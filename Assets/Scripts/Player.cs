@@ -19,7 +19,7 @@ public class Player : MonoBehaviour
 
     public Rigidbody2D throwable;
     public float attackSpeed = 0.5f;
-    public float projectileSpeed = 2.5f;
+    public float projectileSpeed = 5f;
 
     private void Awake()
     {
@@ -48,8 +48,7 @@ public class Player : MonoBehaviour
             ) as Rigidbody2D;
 
             float coolDown = Time.time + attackSpeed;
-            grenade.GetComponent<Rigidbody2D>().velocity = 
-                (mouse_pos_2d - new Vector2(transform.position.x, transform.position.y)) * projectileSpeed;
+            grenade.GetComponent<Rigidbody2D>().velocity = (mouse_pos_2d - new Vector2(transform.position.x, transform.position.y)) * projectileSpeed;
         }
     }
 

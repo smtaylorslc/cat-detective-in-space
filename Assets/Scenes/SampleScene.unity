@@ -311,8 +311,7 @@ MonoBehaviour:
   throwable: {fileID: 7386258216550325018, guid: 56492bc9945fe6146b0f33058a4e5b9b,
     type: 3}
   attackSpeed: 0.5
-  coolDown: 0
-  projectileSpeed: 500
+  projectileSpeed: 5
   aimAngle: 0
 --- !u!212 &1133749067
 SpriteRenderer:
