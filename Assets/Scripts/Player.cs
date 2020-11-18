@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [Range(0, 10)] [SerializeField] private float jumpVelocity = 5f;
+    [Range(0, 10)] [SerializeField] private float jumpVelocity = 10f;
     [Range(0, 10)] [SerializeField] private float speed = 5f;
      
     [SerializeField] private LayerMask WhatIsGround;  
@@ -60,7 +60,14 @@ public class Player : MonoBehaviour
         isGrounded = false;
 
         
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(GroundCheck.position, GroundedRadius, WhatIsGround);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(
+            new Vector2 (
+                transform.position.x, 
+                transform.position.y - gameObject.GetComponent<SpriteRenderer>().bounds.extents.y
+            ),
+            GroundedRadius,
+            WhatIsGround
+        );
         for (int i = 0; i < colliders.Length; i++)
         {
             if (colliders[i].gameObject != gameObject)
