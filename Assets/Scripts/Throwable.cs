@@ -10,11 +10,6 @@ public class Throwable : MonoBehaviour
 
     private float explodeTime = 2.5f;
 
-    private Collider collide;
-    private void Awake()
-    {
-        collide = gameObject.GetComponent<Collider>();
-    }
     // Destroy throwable when it leaves the screen.
     void OnBecameInvisible()
     {
@@ -24,15 +19,19 @@ public class Throwable : MonoBehaviour
     private void ExplodeObject()
     {
         Destroy(gameObject);
-        OnExplode(transform.position);
-    }
-    private void OnExplode(Vector3 position)
-    {
-        Instantiate(explosionPF, position, Quaternion.identity);
+        Instantiate(
+            explosionPF, 
+            transform.position, 
+            Quaternion.identity
+        );
     }
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collide.gameObject.GetComponent<ExplodeOnContact>() != null)
+        // This is really fucky.
+        // I feel like there ought to be better ways
+        // to make custom gameObject params
+        // available to other scripts.
+        if (collider.gameObject.GetComponent<ExplodeOnContact>() != null)
         {
             ExplodeObject();
         }

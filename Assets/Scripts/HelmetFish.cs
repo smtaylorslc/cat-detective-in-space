@@ -18,13 +18,6 @@ public class HelmetFish : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float current_velocity = transform.GetComponent<Rigidbody2D>().velocity.x ;
-        if(current_velocity <= 0){
-            direction = "left";
-        } else if (current_velocity == 0){
-        } else {
-            direction = "right";
-        }
     }
     void Jump()
     /* 
@@ -45,5 +38,23 @@ public class HelmetFish : MonoBehaviour
                 transform.position.y
             )
         ) * projectileSpeed;
+    }
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+        Rigidbody2D rb = transform.GetComponent<Rigidbody2D>();
+        rb.velocity = new Vector2(
+            rb.velocity.x * -1,
+            rb.velocity.y
+        );
+        transform.localScale = new Vector3(
+            transform.localScale.x * -1,
+            transform.localScale.y,
+            transform.localScale.z
+        );
+        if(direction == "left"){
+            direction = "right";
+        } else {
+            direction = "left";
+        }
     }
 }
