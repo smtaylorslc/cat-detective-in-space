@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask WhatIsGround;  
     [SerializeField] private Transform GroundCheck;
 
+    private SpriteRenderer Sprite;
     private Rigidbody2D rigidbody2d;
     private BoxCollider2D boxcollider2d;
     public bool isGrounded = false;
@@ -25,7 +26,7 @@ public class Player : MonoBehaviour
     {
         rigidbody2d = gameObject.GetComponent<Rigidbody2D>();
         boxcollider2d = gameObject.GetComponent<BoxCollider2D>();
-
+        Sprite = gameObject.GetComponent<SpriteRenderer>();
     }
     void Update()
     {
@@ -49,6 +50,17 @@ public class Player : MonoBehaviour
 
             float coolDown = Time.time + attackSpeed;
             grenade.GetComponent<Rigidbody2D>().velocity = (mouse_pos_2d - new Vector2(transform.position.x, transform.position.y)) * projectileSpeed;
+        }
+        if (horizontalMove > 0 && Sprite.flipX)
+        {
+            Sprite.flipX = false;
+        }
+        
+        else if (horizontalMove < 0 && !Sprite.flipX)
+        {
+            // ... flip the player.
+            Sprite.flipX = true;
+
         }
     }
 
