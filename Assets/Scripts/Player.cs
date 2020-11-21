@@ -22,18 +22,29 @@ public class Player : MonoBehaviour
     public float attackSpeed = 0.5f;
     public float projectileSpeed = 5f;
 
+    Animator animator;
+    bool currently_jumping = false;
     private void Awake()
     {
         rigidbody2d = gameObject.GetComponent<Rigidbody2D>();
         boxcollider2d = gameObject.GetComponent<BoxCollider2D>();
         Sprite = gameObject.GetComponent<SpriteRenderer>();
+        animator = gameObject.GetComponent<Animator>();
     }
     void Update()
     {
         horizontalMove = Input.GetAxisRaw("Horizontal") * speed;
+        animator.SetBool("Grounded", isGrounded);
+        animator.SetBool("Falling", rigidbody2d.velocity.y < 0);
+        if(currently_jumping && isGrounded){
+            currently_jumping = false;
+            animator.SetBool("Jumping", false);
+        }
         if (isGrounded && Input.GetKeyDown(KeyCode.Space))
         {
             rigidbody2d.velocity = Vector2.up * jumpVelocity;
+            animator.SetBool("Jumping", true);
+            currently_jumping = true;
         }
         if (Input.GetButtonDown("Fire1"))
         {
@@ -51,6 +62,7 @@ public class Player : MonoBehaviour
             float coolDown = Time.time + attackSpeed;
             grenade.GetComponent<Rigidbody2D>().velocity = (mouse_pos_2d - new Vector2(transform.position.x, transform.position.y)) * projectileSpeed;
         }
+        animator.SetBool("Walking", (horizontalMove != 0));
         if (horizontalMove > 0 && Sprite.flipX)
         {
             Sprite.flipX = false;
