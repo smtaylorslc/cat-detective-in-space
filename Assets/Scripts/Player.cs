@@ -2,30 +2,39 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : LivingThing
+/*
+Inheriting from LivingThing gives us the InitiateHealth
+and takeDamage methods.
+*/
 {
+    // Jump vars.
     [Range(0, 10)] [SerializeField] private float jumpVelocity = 10f;
     [Range(0, 10)] [SerializeField] private float speed = 5f;
-     
+    bool currently_jumping = false;
+    
+    // Ground check vars. 
     [SerializeField] private LayerMask WhatIsGround;  
     [SerializeField] private Transform GroundCheck;
-
-    private SpriteRenderer Sprite;
-    private Rigidbody2D rigidbody2d;
-    private BoxCollider2D boxcollider2d;
     public bool isGrounded = false;
     const float GroundedRadius = .2f;
 
+    // General GO access vars.
+    private SpriteRenderer Sprite;
+    private Rigidbody2D rigidbody2d;
+    private BoxCollider2D boxcollider2d;
+    Animator animator;
+
+    // Movement vars.
     float horizontalMove = 0f;
 
+    // Attack vars.
     public Rigidbody2D throwable;
-    public float attackSpeed = 0.5f;
     public float projectileSpeed = 5f;
 
-    Animator animator;
-    bool currently_jumping = false;
     private void Awake()
     {
+        InitiateHealth();
         rigidbody2d = gameObject.GetComponent<Rigidbody2D>();
         boxcollider2d = gameObject.GetComponent<BoxCollider2D>();
         Sprite = gameObject.GetComponent<SpriteRenderer>();
@@ -59,7 +68,6 @@ public class Player : MonoBehaviour
                 transform.rotation
             ) as Rigidbody2D;
 
-            float coolDown = Time.time + attackSpeed;
             grenade.GetComponent<Rigidbody2D>().velocity = (mouse_pos_2d - new Vector2(transform.position.x, transform.position.y)) * projectileSpeed;
         }
         animator.SetBool("Walking", (horizontalMove != 0));

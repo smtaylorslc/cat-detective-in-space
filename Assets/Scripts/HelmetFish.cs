@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HelmetFish : MonoBehaviour
+public class HelmetFish : LivingThing
 {
     public float projectileSpeed = 2f;
     // We need to know what direction sprite is facing
@@ -12,6 +12,7 @@ public class HelmetFish : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        InitiateHealth();
         direction = "left";
     }
 
@@ -41,6 +42,12 @@ public class HelmetFish : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collider)
     {
+        // The collider box is drawn so that the only triggers possible
+        // are from the left or right, so any collision should trigger
+        // a bounce off the wall.
+        FlipFish(collider);
+    }
+    private void FlipFish(Collider2D collider){
         Rigidbody2D rb = transform.GetComponent<Rigidbody2D>();
         rb.velocity = new Vector2(
             rb.velocity.x * -1,
