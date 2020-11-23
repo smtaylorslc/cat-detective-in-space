@@ -8,17 +8,14 @@ Inheriting from LivingThing gives us the InitiateHealth
 and takeDamage methods.
 */
 {
+    // Grounded var.
+    public bool isGrounded = false;
+    
     // Jump vars.
     [Range(0, 10)] [SerializeField] private float jumpVelocity = 10f;
     [Range(0, 10)] [SerializeField] private float speed = 5f;
     bool currently_jumping = false;
     
-    // Ground check vars. 
-    [SerializeField] private LayerMask WhatIsGround;  
-    [SerializeField] private Transform GroundCheck;
-    public bool isGrounded = false;
-    const float GroundedRadius = .2f;
-
     // General GO access vars.
     private SpriteRenderer Sprite;
     private Rigidbody2D rigidbody2d;
@@ -87,26 +84,7 @@ and takeDamage methods.
     private void FixedUpdate()
     {
         rigidbody2d.velocity = new Vector2(horizontalMove*speed,rigidbody2d.velocity.y);
-
-       
-        isGrounded = false;
-
-        
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(
-            new Vector2 (
-                transform.position.x, 
-                transform.position.y - gameObject.GetComponent<SpriteRenderer>().bounds.extents.y
-            ),
-            GroundedRadius,
-            WhatIsGround
-        );
-        for (int i = 0; i < colliders.Length; i++)
-        {
-            if (colliders[i].gameObject != gameObject)
-            {
-                isGrounded = true;
-            }
-        }
+        isGrounded = checkGrounded();
     }
     
 }

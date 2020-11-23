@@ -1,10 +1,9 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HelmetFish : LivingThing
+public class Enemy : LivingThing
 {
-    public float projectileSpeed = 2f;
     // We need to know what direction sprite is facing
     // to determine jump direction and to allow it to
     // flip around on collision.
@@ -15,39 +14,14 @@ public class HelmetFish : LivingThing
         InitiateHealth();
         direction = "left";
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
-    void Jump()
-    /* 
-    We use this to trigger jumps based on animation frame.
-    */
-    {
-        float x_direction = -1f;
-        if(direction=="right"){
-            x_direction = 1f;
-        }
-        Vector2 direction_to_go = new Vector2(
-            transform.position.x + x_direction,
-            transform.position.y + 1
-        );
-        transform.GetComponent<Rigidbody2D>().velocity = (
-            direction_to_go - new Vector2(
-                transform.position.x,
-                transform.position.y
-            )
-        ) * projectileSpeed;
-    }
     private void OnTriggerEnter2D(Collider2D collider)
     {
         // The collider box is drawn so that the only triggers possible
         // are from the left or right, so any collision should trigger
         // a bounce off the wall.
-        FlipFish(collider);
+        FlipEnemy(collider);
     }
-    private void FlipFish(Collider2D collider){
+    public void FlipEnemy(Collider2D collider){
         Rigidbody2D rb = transform.GetComponent<Rigidbody2D>();
         rb.velocity = new Vector2(
             rb.velocity.x * -1,
@@ -63,5 +37,13 @@ public class HelmetFish : LivingThing
         } else {
             direction = "left";
         }
+    }
+    public void TakeDamage(Collider2D collider){
+        if(collider.gameObject.GetComponent<HurtsEnemy>() != null){
+            takeDamage(collider.gameObject.GetComponent<HurtsEnemy>().getDamage());
+        }
+    }
+    public string GetDirection(){
+        return(direction);
     }
 }
